@@ -98,9 +98,80 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Render Shop Cards in DOM
+  const locateNearMeBtn = document.getElementById('locateNearMeBtn');
+  const locationStatusText = document.getElementById('locationStatusText');
+  let userLocation = null;
+
+  // Haversine Distance Formula (Km)
+  function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+    if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+    const R = 6371; // Earth radius in km
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return Math.round(R * c * 10) / 10;
+  }
+
+  // Geolocation Handler
+  if (locateNearMeBtn) {
+    locateNearMeBtn.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        alert('Geolocation is not supported by your browser.');
+        return;
+      }
+
+      locateNearMeBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Locating GPS...';
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          locateNearMeBtn.innerHTML = '<i class="fa-solid fa-location-dot"></i> GPS Active';
+          locateNearMeBtn.style.background = '#dcfce7';
+          locateNearMeBtn.style.color = '#166534';
+          locateNearMeBtn.style.borderColor = '#86efac';
+
+          if (locationStatusText) {
+            locationStatusText.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #16a34a;"></i> <strong>GPS Active:</strong> Showing stores sorted by distance to your location (${userLocation.lat.toFixed(2)}, ${userLocation.lng.toFixed(2)})`;
+          }
+          loadShops();
+        },
+        (err) => {
+          console.warn('Geolocation permission denied or unavailable, using demo location:', err);
+          userLocation = { lat: 28.6139, lng: 77.2090 };
+          locateNearMeBtn.innerHTML = '<i class="fa-solid fa-location-dot"></i> Demo Location';
+          if (locationStatusText) {
+            locationStatusText.innerHTML = `<strong>Live Proximity:</strong> Showing stores sorted by distance to your region.`;
+          }
+          loadShops();
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+      );
+    });
+  }
+
+  // Render Shop Cards in DOM with Distance Badges
   function renderShops(shops) {
-    shopsGrid.innerHTML = shops
+    let processedShops = shops.map((shop) => {
+      const shopLat = shop.lat || (shop.slug === 'kusum-medical' ? 28.6790 : shop.slug === 'sharma-grocery' ? 28.5355 : 28.6304);
+      const shopLng = shop.lng || (shop.slug === 'kusum-medical' ? 77.2090 : shop.slug === 'sharma-grocery' ? 77.3910 : 77.2777);
+      let distance = null;
+      if (userLocation) {
+        distance = calculateDistanceKm(userLocation.lat, userLocation.lng, shopLat, shopLng);
+      }
+      return { ...shop, distance };
+    });
+
+    if (userLocation) {
+      processedShops.sort((a, b) => (a.distance !== null ? a.distance : 999) - (b.distance !== null ? b.distance : 999));
+    }
+
+    shopsGrid.innerHTML = processedShops
       .map(
         (shop) => `
       <div class="shop-card">
@@ -110,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="shop-badge-group">
               <span class="badge badge-primary">${shop.category}</span>
               ${shop.isVerified ? '<span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Verified</span>' : ''}
+              ${shop.distance !== null ? `<span class="badge" style="background: rgba(15,23,42,0.85); color: white; border: 1px solid rgba(255,255,255,0.3);"><i class="fa-solid fa-location-arrow" style="color: #60a5fa;"></i> ${shop.distance} km away</span>` : ''}
             </div>
             <div style="position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 800;">
               <i class="fa-solid fa-star" style="color: #f59e0b;"></i> ${shop.rating} (${shop.reviews})

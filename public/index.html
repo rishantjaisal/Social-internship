@@ -75,7 +75,15 @@
 
   <!-- Featured Shops List -->
   <section class="container" id="shops-section" style="margin-top: 60px; margin-bottom: 80px;">
-    <h2 style="font-size: 1.75rem; font-weight: 800;">Verified Neighborhood Stores</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <h2 style="font-size: 1.75rem; font-weight: 800;">Verified Neighborhood Stores</h2>
+        <p style="color: var(--text-muted); font-size: 0.875rem;" id="locationStatusText">Connect directly with verified local merchants near you</p>
+      </div>
+      <button class="btn btn-outline" id="locateNearMeBtn" style="border-color: var(--primary); color: var(--primary);">
+        <i class="fa-solid fa-location-crosshairs"></i> Locate Shops Near Me
+      </button>
+    </div>
     <div class="shops-grid" id="shopsGrid">
       <!-- Dynamic Shop Cards Rendered by app.js -->
     </div>
