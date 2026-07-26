@@ -42,7 +42,59 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       }
     } catch (err) {
-      console.error('Error fetching shops:', err);
+      console.warn('Backend API fetch failed, rendering fallback local store data:', err);
+      // Inline Fallback Data for offline or file:// protocol viewing
+      const FALLBACK_SHOPS = [
+        {
+          id: 'b1',
+          name: 'Kusum Medical Store',
+          slug: 'kusum-medical',
+          category: 'Medical',
+          description: '24/7 Licensed Pharmacy providing authentic medicines, healthcare products, surgical supplies, and online prescription delivery.',
+          logo: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300',
+          banner: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=1200',
+          address: 'Shop 14, Main Market, Civil Lines, Delhi - 110054',
+          rating: 4.9,
+          reviews: 128,
+          isVerified: true
+        },
+        {
+          id: 'b2',
+          name: 'Sharma Organic Grocery',
+          slug: 'sharma-grocery',
+          category: 'Grocery',
+          description: 'Fresh farm vegetables, organic pulses, pure dairy, spices, and daily household essentials delivered to your doorstep in 30 minutes.',
+          logo: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=300',
+          banner: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1200',
+          address: 'Block C, Sector 18, Noida - 201301',
+          rating: 4.8,
+          reviews: 95,
+          isVerified: true
+        },
+        {
+          id: 'b3',
+          name: 'RK Electronics & Mobile Repair',
+          slug: 'rk-electronics',
+          category: 'Electronics',
+          description: 'Authorized smartphone repair, laptop accessories, smart TVs, soundbars, and home appliance repair services with genuine warranty.',
+          logo: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=300',
+          banner: 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&q=80&w=1200',
+          address: 'Shop 8, Electronic Complex, Laxmi Nagar, Delhi',
+          rating: 4.7,
+          reviews: 64,
+          isVerified: true
+        }
+      ];
+
+      let filtered = FALLBACK_SHOPS;
+      if (currentCategory !== 'All') {
+        filtered = filtered.filter(s => s.category.toLowerCase() === currentCategory.toLowerCase());
+      }
+      if (currentSearch) {
+        const q = currentSearch.toLowerCase();
+        filtered = filtered.filter(s => s.name.toLowerCase().includes(q) || s.description.toLowerCase().includes(q));
+      }
+      renderShops(filtered);
     }
   }
 
