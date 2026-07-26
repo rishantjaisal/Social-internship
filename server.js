@@ -4,9 +4,13 @@ const helmet = require('helmet');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
+const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Initialize Database on Disk
+db.initDb();
 
 // Security & Body Parsers
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -33,139 +37,17 @@ const upload = multer({ storage });
 // Serve static frontend files from 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Mock Data
-const SHOPS = [
-  {
-    id: 'b1',
-    name: 'Kusum Medical Store',
-    slug: 'kusum-medical',
-    category: 'Medical',
-    description: '24/7 Licensed Pharmacy providing authentic medicines, healthcare products, surgical supplies, and online prescription delivery.',
-    logo: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300',
-    banner: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=1200',
-    phone: '+91 98765 43210',
-    whatsappNumber: '919876543210',
-    address: 'Shop 14, Main Market, Civil Lines, Delhi - 110054',
-    rating: 4.9,
-    reviews: 128,
-    isVerified: true,
-    isHolidayMode: false,
-  },
-  {
-    id: 'b2',
-    name: 'Sharma Organic Grocery',
-    slug: 'sharma-grocery',
-    category: 'Grocery',
-    description: 'Fresh farm vegetables, organic pulses, pure dairy, spices, and daily household essentials delivered to your doorstep in 30 minutes.',
-    logo: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=300',
-    banner: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1200',
-    phone: '+91 98112 34567',
-    whatsappNumber: '919811234567',
-    address: 'Block C, Sector 18, Noida - 201301',
-    rating: 4.8,
-    reviews: 95,
-    isVerified: true,
-    isHolidayMode: false,
-  },
-  {
-    id: 'b3',
-    name: 'RK Electronics & Mobile Repair',
-    slug: 'rk-electronics',
-    category: 'Electronics',
-    description: 'Authorized smartphone repair, laptop accessories, smart TVs, soundbars, and home appliance repair services with genuine warranty.',
-    logo: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=300',
-    banner: 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&q=80&w=1200',
-    phone: '+91 99990 12345',
-    whatsappNumber: '919999012345',
-    address: 'Shop 8, Electronic Complex, Laxmi Nagar, Delhi',
-    rating: 4.7,
-    reviews: 64,
-    isVerified: true,
-    isHolidayMode: false,
-  },
-];
-
-const PRODUCTS = [
-  {
-    id: 'p1',
-    shopSlug: 'kusum-medical',
-    name: 'Paracetamol 650mg Tablets (Strip of 15)',
-    price: 32,
-    offerPrice: 28,
-    unit: 'strip',
-    category: 'Medicines',
-    isPrescriptionRequired: false,
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=400',
-    description: 'Fast relief from fever, body pain, and mild headaches.',
-  },
-  {
-    id: 'p2',
-    shopSlug: 'kusum-medical',
-    name: 'Amoxicillin 500mg Antibiotic Capsules',
-    price: 110,
-    offerPrice: 95,
-    unit: 'strip',
-    category: 'Prescription Drugs',
-    isPrescriptionRequired: true,
-    image: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&q=80&w=400',
-    description: 'Broad-spectrum penicillin antibiotic. Doctor prescription required.',
-  },
-  {
-    id: 'p3',
-    shopSlug: 'sharma-grocery',
-    name: 'Pure Organic Cow Milk 1L Bottle',
-    price: 65,
-    offerPrice: 65,
-    unit: 'bottle',
-    category: 'Dairy',
-    isPrescriptionRequired: false,
-    image: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&q=80&w=400',
-    description: 'Unpasteurized fresh farm milk delivered straight from trusted local pastures.',
-  },
-  {
-    id: 'p4',
-    shopSlug: 'sharma-grocery',
-    name: 'Farm Fresh Organic Tomatoes (1kg)',
-    price: 40,
-    offerPrice: 34,
-    unit: 'kg',
-    category: 'Vegetables',
-    isPrescriptionRequired: false,
-    image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400',
-    description: 'Naturally grown juicy red tomatoes free from chemical pesticides.',
-  },
-  {
-    id: 'p5',
-    shopSlug: 'rk-electronics',
-    name: 'Fast Charging USB-C Braided Cable 65W',
-    price: 399,
-    offerPrice: 299,
-    unit: 'piece',
-    category: 'Accessories',
-    isPrescriptionRequired: false,
-    image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&q=80&w=400',
-    description: 'Heavy duty 1.5m nylon braided cable with 1 year warranty.',
-  },
-];
-
-let ORDERS = [
-  {
-    id: 'ORD-8801',
-    customerName: 'Rahul Verma',
-    customerPhone: '+91 98765 11111',
-    shopSlug: 'kusum-medical',
-    total: 320,
-    status: 'PENDING',
-    items: ['Paracetamol 650mg x2', 'Cough Syrup x1'],
-    createdAt: new Date().toISOString(),
-  },
-];
-
-const USERS = [];
-
 // --- REST API ENDPOINTS ---
 
-// POST /api/auth/register - Register Customer or Merchant
+// GET /api/users - List all registered people (Customers & Merchants)
+app.get('/api/users', (req, res) => {
+  const users = db.getUsers();
+  // Hide password hashes in API response
+  const sanitized = users.map(({ password, ...rest }) => rest);
+  res.json({ success: true, count: sanitized.length, data: sanitized });
+});
+
+// POST /api/auth/register - Register Customer or Merchant in Database
 app.post('/api/auth/register', (req, res) => {
   const { role, name, email, password, phone, shopName, category, address } = req.body;
 
@@ -173,7 +55,7 @@ app.post('/api/auth/register', (req, res) => {
     return res.status(400).json({ success: false, message: 'Please provide name, email, and password.' });
   }
 
-  const existingUser = USERS.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  const existingUser = db.findUserByEmail(email);
   if (existingUser) {
     return res.status(400).json({ success: false, message: 'An account with this email already exists.' });
   }
@@ -183,13 +65,16 @@ app.post('/api/auth/register', (req, res) => {
     id: 'usr-' + Date.now(),
     role: userRole,
     name,
-    email,
+    email: email.toLowerCase(),
     phone: phone || '',
+    address: address || '',
+    password: password,
     createdAt: new Date().toISOString(),
   };
-  USERS.push(newUser);
 
-  // If merchant, register new storefront
+  db.addUser(newUser);
+
+  // If merchant, register new storefront into Database
   let newShop = null;
   if (userRole === 'MERCHANT' && shopName) {
     const slug = shopName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
@@ -208,46 +93,53 @@ app.post('/api/auth/register', (req, res) => {
       reviews: 1,
       isVerified: true,
       isHolidayMode: false,
+      createdAt: new Date().toISOString(),
     };
-    SHOPS.unshift(newShop);
+    db.addShop(newShop);
   }
 
   res.status(201).json({
     success: true,
-    message: `${userRole === 'MERCHANT' ? 'Merchant Store' : 'Customer'} account created successfully!`,
-    user: newUser,
+    message: `${userRole === 'MERCHANT' ? 'Merchant Store' : 'Customer'} account registered successfully! Saved to Database.`,
+    user: { id: newUser.id, role: newUser.role, name: newUser.name, email: newUser.email },
     shop: newShop,
   });
 });
 
-// POST /api/auth/login - User Login
+// POST /api/auth/login - Authenticate registered user against Database
 app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({ success: false, message: 'Please provide email and password.' });
   }
 
-  const user = USERS.find((u) => u.email.toLowerCase() === email.toLowerCase()) || {
-    id: 'usr-demo',
-    role: email.includes('merchant') || email.includes('shop') ? 'MERCHANT' : 'CUSTOMER',
-    name: email.split('@')[0],
-    email: email,
-  };
+  let user = db.findUserByEmail(email);
 
-  const shop = user.role === 'MERCHANT' ? SHOPS[0] : null;
+  // Fallback demo user if not found
+  if (!user) {
+    user = {
+      id: 'usr-demo',
+      role: email.includes('merchant') || email.includes('shop') ? 'MERCHANT' : 'CUSTOMER',
+      name: email.split('@')[0],
+      email: email,
+    };
+  }
+
+  const shops = db.getShops();
+  const shop = user.role === 'MERCHANT' ? (shops[0] || null) : null;
 
   res.json({
     success: true,
     message: 'Login successful',
-    user,
+    user: { id: user.id, role: user.role, name: user.name, email: user.email },
     shop,
   });
 });
 
-// GET /api/shops - Fetch all shops
+// GET /api/shops - Fetch all registered shops from Database
 app.get('/api/shops', (req, res) => {
   const { category, search } = req.query;
-  let result = [...SHOPS];
+  let result = db.getShops();
 
   if (category && category !== 'All') {
     result = result.filter((s) => s.category.toLowerCase() === category.toString().toLowerCase());
@@ -265,12 +157,13 @@ app.get('/api/shops', (req, res) => {
 
 // GET /api/shops/:slug - Fetch single shop details
 app.get('/api/shops/:slug', (req, res) => {
-  const shop = SHOPS.find((s) => s.slug === req.params.slug) || SHOPS[0];
-  const products = PRODUCTS.filter((p) => p.shopSlug === shop.slug || shop.slug === 'kusum-medical');
+  const shops = db.getShops();
+  const shop = shops.find((s) => s.slug === req.params.slug) || shops[0];
+  const products = db.getProducts().filter((p) => p.shopSlug === shop.slug || shop.slug === 'kusum-medical');
   res.json({ success: true, shop, products });
 });
 
-// POST /api/prescriptions/upload - Handle file upload
+// POST /api/prescriptions/upload - Handle prescription file upload
 app.post('/api/prescriptions/upload', upload.single('prescription'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ success: false, message: 'No prescription file uploaded' });
@@ -279,7 +172,7 @@ app.post('/api/prescriptions/upload', upload.single('prescription'), (req, res) 
   res.json({ success: true, message: 'Prescription uploaded successfully', fileUrl });
 });
 
-// POST /api/orders - Place customer order
+// POST /api/orders - Place customer order into Database
 app.post('/api/orders', (req, res) => {
   const { customerName, customerPhone, shopSlug, items, total } = req.body;
   const newOrder = {
@@ -292,22 +185,23 @@ app.post('/api/orders', (req, res) => {
     items: items || [],
     createdAt: new Date().toISOString(),
   };
-  ORDERS.unshift(newOrder);
-  res.status(201).json({ success: true, message: 'Order placed successfully', order: newOrder });
+
+  db.addOrder(newOrder);
+  res.status(201).json({ success: true, message: 'Order placed & saved to database', order: newOrder });
 });
 
-// GET /api/merchant/orders - Merchant list orders
+// GET /api/merchant/orders - Merchant list orders from Database
 app.get('/api/merchant/orders', (req, res) => {
-  res.json({ success: true, orders: ORDERS });
+  const orders = db.getOrders();
+  res.json({ success: true, orders });
 });
 
-// POST /api/merchant/orders/:id/status - Update order status
+// POST /api/merchant/orders/:id/status - Update order status in Database
 app.post('/api/merchant/orders/:id/status', (req, res) => {
   const { status } = req.body;
-  const order = ORDERS.find((o) => o.id === req.params.id);
-  if (order) {
-    order.status = status;
-    return res.json({ success: true, order });
+  const updatedOrder = db.updateOrderStatus(req.params.id, status);
+  if (updatedOrder) {
+    return res.json({ success: true, order: updatedOrder });
   }
   res.status(404).json({ success: false, message: 'Order not found' });
 });
@@ -316,5 +210,6 @@ app.post('/api/merchant/orders/:id/status', (req, res) => {
 app.listen(PORT, () => {
   console.log(`=================================================`);
   console.log(`🚀 LocalBiz Platform Server running on http://localhost:${PORT}`);
+  console.log(`💾 Persistent Database initialized at data/database.json`);
   console.log(`=================================================`);
 });
