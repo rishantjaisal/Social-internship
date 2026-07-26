@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LocalBiz | Empowering Every Local Business to Go Digital</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-store"></i>
+        </div>
+        <div class="brand-text">Local<span>Biz</span></div>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="nav-search">
+        <i class="fa-solid fa-magnifying-glass nav-search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Search medical, grocery, repair, salons near you...">
+        <div class="nav-search-tools">
+          <button type="button" class="tool-btn" id="voiceSearchBtn" title="Voice Search">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a href="#shops-section" class="btn btn-outline">Explore Shops</a>
+        <a href="merchant.html" class="btn btn-primary">Merchant Portal</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-tag">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Empowering Every Local Shop To Go Digital
+      </div>
+      <h1>Order Directly From Your <br><span class="highlight">Neighborhood Stores</span></h1>
+      <p>Instant digital storefronts for medical pharmacies, grocery shops, cafes, electronics, and hardware stores with 1-click WhatsApp checkout.</p>
+    </div>
+  </section>
+
+  <!-- Business Category Filter -->
+  <section class="container" style="margin-top: 40px;">
+    <h2 style="font-size: 1.5rem; font-weight: 800;">Browse By Business Category</h2>
+    <p style="color: var(--text-muted); font-size: 0.875rem;">Discover verified digital storefronts across top local industries</p>
+
+    <div class="categories-grid">
+      <div class="category-card category-filter active" data-category="All">
+        <div class="category-icon" style="background: #eff6ff; color: #2563eb;"><i class="fa-solid fa-border-all"></i></div>
+        <span style="font-size: 0.75rem; font-weight: 800;">All Shops</span>
+      </div>
+      <div class="category-card category-filter" data-category="Medical">
+        <div class="category-icon" style="background: #ffe4e6; color: #e11d48;"><i class="fa-solid fa-notes-medical"></i></div>
+        <span style="font-size: 0.75rem; font-weight: 800;">Medical</span>
+      </div>
+      <div class="category-card category-filter" data-category="Grocery">
+        <div class="category-icon" style="background: #dcfce7; color: #16a34a;"><i class="fa-solid fa-basket-shopping"></i></div>
+        <span style="font-size: 0.75rem; font-weight: 800;">Grocery</span>
+      </div>
+      <div class="category-card category-filter" data-category="Electronics">
+        <div class="category-icon" style="background: #dbeafe; color: #2563eb;"><i class="fa-solid fa-mobile-screen"></i></div>
+        <span style="font-size: 0.75rem; font-weight: 800;">Electronics</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Shops List -->
+  <section class="container" id="shops-section" style="margin-top: 60px; margin-bottom: 80px;">
+    <h2 style="font-size: 1.75rem; font-weight: 800;">Verified Neighborhood Stores</h2>
+    <div class="shops-grid" id="shopsGrid">
+      <!-- Dynamic Shop Cards Rendered by app.js -->
+    </div>
+  </section>
+
+  <!-- Voice Search Modal Dialog -->
+  <div class="modal-backdrop" id="voiceModal">
+    <div class="modal text-center" style="text-align: center;">
+      <div class="voice-pulse">
+        <i class="fa-solid fa-microphone fa-2x"></i>
+      </div>
+      <h3 style="font-weight: 800; margin-bottom: 8px;">Voice Product Search</h3>
+      <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 20px;">
+        Speak now: "Paracetamol 500mg" or "Fresh Milk"
+      </p>
+      <div id="voiceTranscript" style="background: var(--background); padding: 12px; border-radius: var(--radius-md); font-weight: 700; min-height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+        Listening...
+      </div>
+      <button class="btn btn-outline" id="closeVoiceBtn" style="width: 100%;">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div>
+        <h4 style="color: white; font-weight: 900; font-size: 1.25rem;">LocalBiz</h4>
+        <p style="font-size: 0.8rem; margin-top: 4px;">Empowering Every Local Business to Go Digital.</p>
+      </div>
+      <p style="font-size: 0.8rem;">© 2026 LocalBiz Inc. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

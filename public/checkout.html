@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | LocalBiz</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+        <div class="brand-text">Local<span>Biz</span></div>
+      </a>
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Continue Shopping</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container" style="margin-top: 40px; margin-bottom: 80px;">
+    <h1 style="font-size: 2rem; font-weight: 900; margin-bottom: 24px;">Order Checkout</h1>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px;">
+      <!-- Customer Information Form -->
+      <div style="background: white; padding: 28px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+        <h3 style="font-weight: 800; margin-bottom: 16px;">Delivery Details</h3>
+
+        <form id="checkoutForm" style="display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">Your Name</label>
+            <input type="text" id="custName" required placeholder="e.g. Rahul Verma" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.875rem;">
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">Phone Number (WhatsApp)</label>
+            <input type="tel" id="custPhone" required placeholder="e.g. +91 98765 43210" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.875rem;">
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">Delivery Address</label>
+            <textarea id="custAddress" rows="3" required placeholder="Flat, Street, Landmark..." style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.875rem;"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px; padding: 14px;">
+            <i class="fa-solid fa-circle-check"></i> Place Local Order Now
+          </button>
+        </form>
+      </div>
+
+      <!-- Order Summary Card -->
+      <div style="background: white; padding: 28px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-sm); height: fit-content;">
+        <h3 style="font-weight: 800; margin-bottom: 16px; border-bottom: 1px solid var(--border); pb: 12px;">Order Summary</h3>
+        <div id="cartItemsList" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+          <!-- Rendered by checkout.js -->
+        </div>
+
+        <div style="border-top: 1px solid var(--border); padding-top: 16px; font-size: 1.125rem; font-weight: 900; display: flex; justify-content: space-between;">
+          <span>Grand Total</span>
+          <span style="color: var(--primary);" id="checkoutTotal">₹0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cartItemsList = document.getElementById('cartItemsList');
+      const checkoutTotal = document.getElementById('checkoutTotal');
+      const checkoutForm = document.getElementById('checkoutForm');
+
+      let cart = JSON.parse(localStorage.getItem('localbiz_cart') || '[]');
+
+      function renderCheckout() {
+        if (cart.length === 0) {
+          cartItemsList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.875rem;">Your cart is empty.</p>';
+          checkoutTotal.textContent = '₹0';
+          return;
+        }
+
+        let total = 0;
+        cartItemsList.innerHTML = cart.map(item => {
+          const itemTotal = item.price * item.quantity;
+          total += itemTotal;
+          return `
+            <div style="display: flex; justify-content: space-between; font-size: 0.875rem;">
+              <span><strong>${item.name}</strong> x${item.quantity}</span>
+              <span>₹${itemTotal}</span>
+            </div>
+          `;
+        }).join('');
+
+        checkoutTotal.textContent = `₹${total}`;
+      }
+
+      if (checkoutForm) {
+        checkoutForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if (cart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+          }
+
+          const name = document.getElementById('custName').value;
+          const phone = document.getElementById('custPhone').value;
+
+          const total = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
+          const items = cart.map(i => `${i.name} x${i.quantity}`);
+
+          try {
+            const response = await fetch('/api/orders', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                customerName: name,
+                customerPhone: phone,
+                shopSlug: cart[0]?.shopSlug || 'kusum-medical',
+                items: items,
+                total: total
+              })
+            });
+
+            const res = await response.json();
+            if (res.success) {
+              alert(`Success! Order #${res.order.id} has been placed. Shop owner has been notified!`);
+              localStorage.removeItem('localbiz_cart');
+              window.location.href = 'index.html';
+            }
+          } catch (err) {
+            console.error('Order submission error:', err);
+          }
+        });
+      }
+
+      renderCheckout();
+    });
+  </script>
+</body>
+</html>

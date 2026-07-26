@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Storefront | LocalBiz</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+        <div class="brand-text">Local<span>Biz</span></div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="checkout.html" class="btn btn-outline" id="cartBtn">
+          <i class="fa-solid fa-cart-shopping"></i> Cart (<span id="cartCount">0</span>)
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Store Header Banner -->
+  <div style="position: relative; height: 260px; background-size: cover; background-position: center;" id="shopHeaderBanner">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(15,23,42,0.85) 100%);"></div>
+    <div class="container" style="position: relative; z-index: 10; height: 100%; display: flex; align-items: flex-end; pb: 24px;">
+      <a href="index.html" class="btn btn-outline" style="position: absolute; top: 20px; left: 24px; color: white; background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.3);">
+        <i class="fa-solid fa-arrow-left"></i> Back to All Shops
+      </a>
+    </div>
+  </div>
+
+  <!-- Store Metadata Header Card -->
+  <div class="container" style="margin-top: -60px; position: relative; z-index: 20;">
+    <div style="background: white; border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;">
+      <div style="display: flex; gap: 20px; align-items: flex-start;">
+        <img id="shopLogoImg" src="" alt="Shop Logo" style="width: 84px; height: 84px; border-radius: var(--radius-md); border: 2px solid white; box-shadow: var(--shadow-md); object-fit: cover;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <h1 id="shopNameTitle" style="font-size: 1.75rem; font-weight: 900;">Store Name</h1>
+            <span class="badge badge-success" id="shopVerifiedBadge"><i class="fa-solid fa-circle-check"></i> Verified</span>
+          </div>
+          <p id="shopDescText" style="color: var(--text-muted); font-size: 0.875rem; max-width: 600px; margin-top: 4px;"></p>
+          <div style="display: flex; gap: 16px; margin-top: 12px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); flex-wrap: wrap;">
+            <span id="shopRatingSpan"><i class="fa-solid fa-star" style="color: #f59e0b;"></i> 4.9 (128 Reviews)</span>
+            <span id="shopAddressSpan"><i class="fa-solid fa-location-dot" style="color: var(--primary);"></i> Main Market</span>
+            <span style="color: #16a34a;"><i class="fa-solid fa-clock"></i> Open 08:00 AM - 11:00 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;" id="shopActionBtns">
+        <button class="btn btn-primary" id="openRxModalBtn" style="background: var(--accent); display: none;">
+          <i class="fa-solid fa-file-medical"></i> Upload Prescription
+        </button>
+        <button class="btn btn-whatsapp" id="whatsappOrderBtn">
+          <i class="fa-brands fa-whatsapp fa-lg"></i> Order via WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Store Products Section -->
+  <section class="container" style="margin-top: 40px; margin-bottom: 80px;">
+    <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 20px;">Available Products & Services</h2>
+    <div class="shops-grid" id="productsGrid" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));">
+      <!-- Dynamic Products Rendered by shop.js -->
+    </div>
+  </section>
+
+  <!-- Prescription Upload Modal -->
+  <div class="modal-backdrop" id="rxModal">
+    <div class="modal">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-weight: 800;"><i class="fa-solid fa-file-medical" style="color: var(--accent);"></i> Upload Prescription</h3>
+        <button id="closeRxBtn" style="font-size: 1.25rem; color: var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">
+        Upload doctor prescription photo for verification by Kusum Medical licensed pharmacists.
+      </p>
+
+      <form id="rxForm" style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="border: 2px dashed var(--border); padding: 24px; text-align: center; border-radius: var(--radius-md); background: var(--background);">
+          <i class="fa-solid fa-cloud-arrow-up fa-2x" style="color: var(--primary); margin-bottom: 8px;"></i>
+          <p style="font-size: 0.875rem; font-weight: 700;">Click to select prescription file</p>
+          <input type="file" id="rxFileInput" accept="image/*,.pdf" style="margin-top: 12px;" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          <i class="fa-solid fa-paper-plane"></i> Upload & Submit Order
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="shop.js"></script>
+</body>
+</html>
