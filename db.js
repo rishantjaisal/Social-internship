@@ -198,6 +198,22 @@ function addShop(shop) {
   return shop;
 }
 
+function updateShopSettings(slug, settings) {
+  const db = readDb();
+  const shop = db.shops.find((s) => s.slug === slug);
+  if (shop) {
+    if (settings.logo) shop.logo = settings.logo;
+    if (settings.banner) shop.banner = settings.banner;
+    if (settings.name) shop.name = settings.name;
+    if (settings.description) shop.description = settings.description;
+    if (settings.phone) shop.phone = settings.phone;
+    if (settings.whatsappNumber) shop.whatsappNumber = settings.whatsappNumber;
+    if (settings.address) shop.address = settings.address;
+    writeDb(db);
+  }
+  return shop;
+}
+
 // Product CRUD Operations
 function getProducts() {
   const db = readDb();
@@ -235,6 +251,7 @@ module.exports = {
   getShops,
   findShopBySlug,
   addShop,
+  updateShopSettings,
   getProducts,
   getOrders,
   addOrder,

@@ -49,7 +49,7 @@ app.get('/api/users', (req, res) => {
 
 // POST /api/auth/register - Register Customer or Merchant in Database
 app.post('/api/auth/register', (req, res) => {
-  const { role, name, email, password, phone, shopName, category, address } = req.body;
+  const { role, name, email, password, phone, shopName, category, address, logo, banner } = req.body;
 
   if (!email || !password || !name) {
     return res.status(400).json({ success: false, message: 'Please provide name, email, and password.' });
@@ -84,8 +84,8 @@ app.post('/api/auth/register', (req, res) => {
       slug: slug || 'my-shop',
       category: category || 'Other',
       description: `Welcome to ${shopName}! Official local business storefront on LocalBiz.`,
-      logo: 'https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&q=80&w=300',
-      banner: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1200',
+      logo: logo || 'https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&q=80&w=300',
+      banner: banner || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1200',
       phone: phone || '+91 98765 43210',
       whatsappNumber: (phone || '919876543210').replace(/\D/g, ''),
       address: address || 'Main Market Road',
@@ -104,6 +104,29 @@ app.post('/api/auth/register', (req, res) => {
     user: { id: newUser.id, role: newUser.role, name: newUser.name, email: newUser.email },
     shop: newShop,
   });
+});
+
+// POST /api/merchant/store-settings - Update store banner & logo picture
+app.post('/api/merchant/store-settings', (req, res) => {
+  const { slug, logo, banner, name, description, phone, whatsappNumber, address } = req.body;
+  if (!slug) {
+    return res.status(400).json({ success: false, message: 'Shop slug is required' });
+  }
+
+  const updatedShop = db.updateShopSettings(slug, {
+    logo,
+    banner,
+    name,
+    description,
+    phone,
+    whatsappNumber,
+    address,
+  });
+
+  if (updatedShop) {
+    return res.json({ success: true, message: 'Store profile & banner updated successfully', shop: updatedShop });
+  }
+  res.status(404).json({ success: false, message: 'Shop not found' });
 });
 
 // POST /api/auth/login - Authenticate registered user against Database

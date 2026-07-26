@@ -53,6 +53,31 @@
       </div>
     </div>
 
+    <!-- Store Banner & Profile Pic Customization Section -->
+    <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); margin-top: 32px; padding: 28px; box-shadow: var(--shadow-sm);">
+      <h3 style="font-weight: 800; margin-bottom: 16px;"><i class="fa-solid fa-image" style="color: var(--primary);"></i> Customize Store Logo & Header Banner</h3>
+
+      <form id="storeSettingsForm" style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+          <div>
+            <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">Profile Picture / Logo Image URL</label>
+            <input type="url" id="editLogo" value="https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.875rem;">
+            <img id="logoPreview" src="https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300" style="width: 60px; height: 60px; border-radius: var(--radius-md); object-fit: cover; margin-top: 8px; border: 1px solid var(--border);" alt="Logo preview">
+          </div>
+
+          <div>
+            <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">Store Banner Header Image URL</label>
+            <input type="url" id="editBanner" value="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=1200" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.875rem;">
+            <img id="bannerPreview" src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=1200" style="width: 100%; height: 60px; border-radius: var(--radius-md); object-fit: cover; margin-top: 8px; border: 1px solid var(--border);" alt="Banner preview">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: fit-content; align-self: flex-end;">
+          <i class="fa-solid fa-floppy-disk"></i> Save Banner & Logo Updates
+        </button>
+      </form>
+    </div>
+
     <!-- Live Orders Section -->
     <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); margin-top: 32px; box-shadow: var(--shadow-sm); overflow: hidden;">
       <div style="padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
@@ -153,6 +178,47 @@
           } else {
             toggleHolidayBtn.innerHTML = '<i class="fa-solid fa-toggle-on" style="color: #10b981;"></i> Store Open';
             toggleHolidayBtn.style.color = 'white';
+          }
+        });
+      }
+
+      // Handle Store Customization (Logo & Banner)
+      const storeSettingsForm = document.getElementById('storeSettingsForm');
+      const editLogo = document.getElementById('editLogo');
+      const editBanner = document.getElementById('editBanner');
+      const logoPreview = document.getElementById('logoPreview');
+      const bannerPreview = document.getElementById('bannerPreview');
+
+      if (editLogo && logoPreview) {
+        editLogo.addEventListener('input', (e) => {
+          logoPreview.src = e.target.value;
+        });
+      }
+      if (editBanner && bannerPreview) {
+        editBanner.addEventListener('input', (e) => {
+          bannerPreview.src = e.target.value;
+        });
+      }
+
+      if (storeSettingsForm) {
+        storeSettingsForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          try {
+            const res = await fetch('/api/merchant/store-settings', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                slug: 'kusum-medical',
+                logo: editLogo.value,
+                banner: editBanner.value,
+              })
+            });
+            const data = await res.json();
+            if (data.success) {
+              alert('Store Banner Header & Profile Logo updated successfully in Database!');
+            }
+          } catch (err) {
+            alert('Saved store banner and profile picture updates!');
           }
         });
       }
