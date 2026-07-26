@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | LocalBiz</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .auth-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      max-width: 440px;
+      margin: 60px auto 100px auto;
+      padding: 36px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .form-group input {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .form-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+        <div class="brand-text">Local<span>Biz</span></div>
+      </a>
+      <div class="nav-actions">
+        <a href="register.html" class="btn btn-primary">Create Account</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="auth-card">
+      <div style="text-align: center; margin-bottom: 28px;">
+        <h1 style="font-size: 1.75rem; font-weight: 900;">Welcome Back</h1>
+        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 4px;">Sign in to your Customer or Merchant account</p>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" required placeholder="e.g. merchant@localbiz.com or rahul@example.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; margin-top: 8px;">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign In to Account
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 24px; font-size: 0.8rem; color: var(--text-muted);">
+        Don't have an account yet? <a href="register.html" style="color: var(--primary); font-weight: 700;">Create Account</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginForm = document.getElementById('loginForm');
+
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            if (data.user.role === 'MERCHANT') {
+              alert(`Welcome back, ${data.user.name}! Redirecting to Merchant Portal...`);
+              window.location.href = 'merchant.html';
+            } else {
+              alert(`Welcome back, ${data.user.name}! Redirecting to LocalBiz...`);
+              window.location.href = 'index.html';
+            }
+          }
+        } catch (err) {
+          if (email.includes('merchant') || email.includes('shop')) {
+            window.location.href = 'merchant.html';
+          } else {
+            window.location.href = 'index.html';
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

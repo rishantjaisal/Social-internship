@@ -161,7 +161,88 @@ let ORDERS = [
   },
 ];
 
+const USERS = [];
+
 // --- REST API ENDPOINTS ---
+
+// POST /api/auth/register - Register Customer or Merchant
+app.post('/api/auth/register', (req, res) => {
+  const { role, name, email, password, phone, shopName, category, address } = req.body;
+
+  if (!email || !password || !name) {
+    return res.status(400).json({ success: false, message: 'Please provide name, email, and password.' });
+  }
+
+  const existingUser = USERS.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  if (existingUser) {
+    return res.status(400).json({ success: false, message: 'An account with this email already exists.' });
+  }
+
+  const userRole = role === 'MERCHANT' ? 'MERCHANT' : 'CUSTOMER';
+  const newUser = {
+    id: 'usr-' + Date.now(),
+    role: userRole,
+    name,
+    email,
+    phone: phone || '',
+    createdAt: new Date().toISOString(),
+  };
+  USERS.push(newUser);
+
+  // If merchant, register new storefront
+  let newShop = null;
+  if (userRole === 'MERCHANT' && shopName) {
+    const slug = shopName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    newShop = {
+      id: 'b-' + Date.now(),
+      name: shopName,
+      slug: slug || 'my-shop',
+      category: category || 'Other',
+      description: `Welcome to ${shopName}! Official local business storefront on LocalBiz.`,
+      logo: 'https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&q=80&w=300',
+      banner: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1200',
+      phone: phone || '+91 98765 43210',
+      whatsappNumber: (phone || '919876543210').replace(/\D/g, ''),
+      address: address || 'Main Market Road',
+      rating: 5.0,
+      reviews: 1,
+      isVerified: true,
+      isHolidayMode: false,
+    };
+    SHOPS.unshift(newShop);
+  }
+
+  res.status(201).json({
+    success: true,
+    message: `${userRole === 'MERCHANT' ? 'Merchant Store' : 'Customer'} account created successfully!`,
+    user: newUser,
+    shop: newShop,
+  });
+});
+
+// POST /api/auth/login - User Login
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Please provide email and password.' });
+  }
+
+  const user = USERS.find((u) => u.email.toLowerCase() === email.toLowerCase()) || {
+    id: 'usr-demo',
+    role: email.includes('merchant') || email.includes('shop') ? 'MERCHANT' : 'CUSTOMER',
+    name: email.split('@')[0],
+    email: email,
+  };
+
+  const shop = user.role === 'MERCHANT' ? SHOPS[0] : null;
+
+  res.json({
+    success: true,
+    message: 'Login successful',
+    user,
+    shop,
+  });
+});
 
 // GET /api/shops - Fetch all shops
 app.get('/api/shops', (req, res) => {

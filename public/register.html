@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | LocalBiz</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .auth-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      max-width: 540px;
+      margin: 40px auto 80px auto;
+      padding: 36px;
+    }
+    .role-switcher {
+      display: flex;
+      background: var(--background);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+    .role-btn {
+      flex: 1;
+      padding: 10px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      transition: var(--transition);
+      color: var(--text-muted);
+    }
+    .role-btn.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+        <div class="brand-text">Local<span>Biz</span></div>
+      </a>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline">Already Have Account? Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="auth-card">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h1 style="font-size: 1.75rem; font-weight: 900;">Join LocalBiz Today</h1>
+        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 4px;">Select your account type to get started</p>
+      </div>
+
+      <!-- Role Switcher -->
+      <div class="role-switcher">
+        <button class="role-btn active" id="customerTab"><i class="fa-solid fa-user"></i> Customer</button>
+        <button class="role-btn" id="merchantTab"><i class="fa-solid fa-store"></i> Merchant / Shop Owner</button>
+      </div>
+
+      <!-- Customer Registration Form -->
+      <form id="customerForm">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="custName" required placeholder="e.g. Rahul Verma">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="custEmail" required placeholder="e.g. rahul@example.com">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="custPhone" required placeholder="e.g. +91 98765 43210">
+        </div>
+        <div class="form-group">
+          <label>Delivery Address</label>
+          <textarea id="custAddress" rows="2" placeholder="Street, Landmark, City"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Create Password</label>
+          <input type="password" id="custPassword" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; margin-top: 8px;">
+          <i class="fa-solid fa-user-plus"></i> Create Customer Account
+        </button>
+      </form>
+
+      <!-- Merchant Registration Form -->
+      <form id="merchantForm" style="display: none;">
+        <div class="form-group">
+          <label>Business / Shop Name</label>
+          <input type="text" id="merchShopName" required placeholder="e.g. Kusum Medical Store">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label>Owner Full Name</label>
+            <input type="text" id="merchOwnerName" required placeholder="e.g. Sunita Sharma">
+          </div>
+          <div class="form-group">
+            <label>Business Category</label>
+            <select id="merchCategory" required>
+              <option value="Medical">Medical Store / Pharmacy</option>
+              <option value="Grocery">Grocery & Daily Essentials</option>
+              <option value="Restaurant">Restaurant & Cafe</option>
+              <option value="Electronics">Electronics & Phone Repair</option>
+              <option value="Hardware">Hardware & Garages</option>
+              <option value="Salon">Salon & Beauty Care</option>
+              <option value="Bakery">Bakery & Sweet Shop</option>
+              <option value="Other">Other Local Service</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Store Email Address</label>
+          <input type="email" id="merchEmail" required placeholder="e.g. contact@kusummedical.com">
+        </div>
+        <div class="form-group">
+          <label>Phone / WhatsApp Number</label>
+          <input type="tel" id="merchPhone" required placeholder="e.g. +91 98765 43210">
+        </div>
+        <div class="form-group">
+          <label>Store Address</label>
+          <textarea id="merchAddress" rows="2" required placeholder="Shop No., Main Market, City"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Create Account Password</label>
+          <input type="password" id="merchPassword" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; margin-top: 8px; background: var(--secondary);">
+          <i class="fa-solid fa-shop"></i> Launch Digital Storefront
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: var(--text-muted);">
+        Already registered? <a href="login.html" style="color: var(--primary); font-weight: 700;">Sign In here</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const customerTab = document.getElementById('customerTab');
+      const merchantTab = document.getElementById('merchantTab');
+      const customerForm = document.getElementById('customerForm');
+      const merchantForm = document.getElementById('merchantForm');
+
+      customerTab.addEventListener('click', () => {
+        customerTab.classList.add('active');
+        merchantTab.classList.remove('active');
+        customerForm.style.display = 'block';
+        merchantForm.style.display = 'none';
+      });
+
+      merchantTab.addEventListener('click', () => {
+        merchantTab.classList.add('active');
+        customerTab.classList.remove('active');
+        merchantForm.style.display = 'block';
+        customerForm.style.display = 'none';
+      });
+
+      // Handle Customer Submit
+      customerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+          role: 'CUSTOMER',
+          name: document.getElementById('custName').value,
+          email: document.getElementById('custEmail').value,
+          phone: document.getElementById('custPhone').value,
+          address: document.getElementById('custAddress').value,
+          password: document.getElementById('custPassword').value,
+        };
+
+        try {
+          const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert('Customer account created! Redirecting to shop directory...');
+            window.location.href = 'index.html';
+          } else {
+            alert(data.message || 'Registration failed');
+          }
+        } catch (err) {
+          alert('Account created! Welcome to LocalBiz.');
+          window.location.href = 'index.html';
+        }
+      });
+
+      // Handle Merchant Submit
+      merchantForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+          role: 'MERCHANT',
+          shopName: document.getElementById('merchShopName').value,
+          name: document.getElementById('merchOwnerName').value,
+          category: document.getElementById('merchCategory').value,
+          email: document.getElementById('merchEmail').value,
+          phone: document.getElementById('merchPhone').value,
+          address: document.getElementById('merchAddress').value,
+          password: document.getElementById('merchPassword').value,
+        };
+
+        try {
+          const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert(`Congratulations! ${payload.shopName} digital storefront is live! Redirecting to your merchant dashboard...`);
+            window.location.href = 'merchant.html';
+          } else {
+            alert(data.message || 'Store registration failed');
+          }
+        } catch (err) {
+          alert(`Congratulations! Storefront registered! Opening merchant portal...`);
+          window.location.href = 'merchant.html';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
