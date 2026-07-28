@@ -278,6 +278,53 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
+  // FAQ Accordion Toggle
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach((item) => {
+    const question = item.querySelector('.faq-question');
+    if (question) {
+      question.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        faqItems.forEach((i) => i.classList.remove('active'));
+        if (!isActive) item.classList.add('active');
+      });
+    }
+  });
+
+  // Simulated Live Purchase Ticker Popup
+  const liveTickerContainer = document.getElementById('liveTickerContainer');
+  if (liveTickerContainer) {
+    const notifications = [
+      { name: 'Rahul V.', area: 'Civil Lines', shop: 'Kusum Medical Store', item: 'Paracetamol 650mg' },
+      { name: 'Pooja S.', area: 'Sector 18 Noida', shop: 'Sharma Organic Grocery', item: 'Pure Organic Milk' },
+      { name: 'Amit K.', area: 'Laxmi Nagar', shop: 'RK Electronics', item: '65W Fast Charger' },
+      { name: 'Neha R.', area: 'Civil Lines', shop: 'Kusum Medical Store', item: 'Prescription Upload Order' },
+    ];
+    let index = 0;
+
+    function showNextNotification() {
+      const n = notifications[index % notifications.length];
+      index++;
+
+      liveTickerContainer.innerHTML = `
+        <div class="live-ticker">
+          <i class="fa-solid fa-bag-shopping" style="color: var(--secondary); font-size: 1.25rem;"></i>
+          <div>
+            <strong>${n.name}</strong> (${n.area}) ordered <strong>${n.item}</strong> from <em>${n.shop}</em>
+            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;"><i class="fa-solid fa-bolt" style="color: var(--accent);"></i> Just now • 30-Min Delivery</div>
+          </div>
+        </div>
+      `;
+
+      setTimeout(() => {
+        liveTickerContainer.innerHTML = '';
+      }, 4500);
+    }
+
+    setTimeout(showNextNotification, 2500);
+    setInterval(showNextNotification, 10000);
+  }
+
   // Initial Load
   loadShops();
 });
