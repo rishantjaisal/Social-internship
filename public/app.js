@@ -325,6 +325,20 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(showNextNotification, 10000);
   }
 
+  // Merchant Savings Calculator Slider
+  const salesRange = document.getElementById('salesRange');
+  const salesDisplay = document.getElementById('salesDisplay');
+  const savingsDisplay = document.getElementById('savingsDisplay');
+
+  if (salesRange && salesDisplay && savingsDisplay) {
+    salesRange.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      salesDisplay.textContent = `₹${val.toLocaleString('en-IN')}`;
+      const savings = Math.round(val * 0.3);
+      savingsDisplay.textContent = `₹${savings.toLocaleString('en-IN')}`;
+    });
+  }
+
   // Initial Load
   loadShops();
 });

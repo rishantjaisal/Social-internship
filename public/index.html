@@ -138,6 +138,60 @@
     </div>
   </section>
 
+  <!-- Featured Promo Coupon Codes Banner -->
+  <section class="container" style="margin-top: 40px;">
+    <div style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border-radius: var(--radius-lg); padding: 28px 32px; color: white; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; box-shadow: var(--shadow-lg);">
+      <div>
+        <span class="badge" style="background: rgba(255,255,255,0.15); color: #a5b4fc; font-weight: 800;"><i class="fa-solid fa-ticket"></i> Special Neighborhood Deals</span>
+        <h3 style="font-size: 1.5rem; font-weight: 900; margin-top: 6px;">Exclusive Coupons For Local Buyers</h3>
+        <p style="color: #cbd5e1; font-size: 0.85rem; margin-top: 2px;">Apply these codes at checkout or mention them on WhatsApp for instant discounts!</p>
+      </div>
+
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <div style="background: rgba(255,255,255,0.1); border: 1px dashed rgba(255,255,255,0.3); border-radius: var(--radius-md); padding: 10px 16px; text-align: center;">
+          <div style="font-size: 0.7rem; color: #a5b4fc; font-weight: 700; text-transform: uppercase;">Flat ₹100 Off</div>
+          <div style="font-family: monospace; font-size: 1.1rem; font-weight: 900; color: #facc15;">LOCAL100</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); border: 1px dashed rgba(255,255,255,0.3); border-radius: var(--radius-md); padding: 10px 16px; text-align: center;">
+          <div style="font-size: 0.7rem; color: #a5b4fc; font-weight: 700; text-transform: uppercase;">20% Off Pharmacy</div>
+          <div style="font-family: monospace; font-size: 1.1rem; font-weight: 900; color: #4ade80;">HEALTH20</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); border: 1px dashed rgba(255,255,255,0.3); border-radius: var(--radius-md); padding: 10px 16px; text-align: center;">
+          <div style="font-size: 0.7rem; color: #a5b4fc; font-weight: 700; text-transform: uppercase;">Free 30-Min Delivery</div>
+          <div style="font-family: monospace; font-size: 1.1rem; font-weight: 900; color: #60a5fa;">FREEDEL</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Merchant Savings Calculator -->
+  <section class="container" style="margin-top: 60px; margin-bottom: 60px;">
+    <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 36px; box-shadow: var(--shadow-sm); display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; align-items: center;">
+      <div>
+        <span class="badge badge-success" style="margin-bottom: 8px;"><i class="fa-solid fa-calculator"></i> Merchant Profit Calculator</span>
+        <h2 style="font-size: 1.75rem; font-weight: 900;">Calculate How Much Your Shop Saves</h2>
+        <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 4px;">Big aggregators charge 25%-30% commission per order. LocalBiz charges <strong>₹0 commission forever</strong>.</p>
+
+        <div style="margin-top: 24px;">
+          <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 8px;">Your Estimated Monthly Online Orders Value (₹)</label>
+          <input type="range" id="salesRange" min="10000" max="500000" step="5000" value="100000" style="width: 100%; accent-color: var(--primary);">
+          <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 0.875rem; margin-top: 6px;">
+            <span>₹10,000</span>
+            <span id="salesDisplay" style="color: var(--primary); font-weight: 900; font-size: 1.1rem;">₹1,00,000</span>
+            <span>₹5,00,000</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: var(--dark-surface); color: white; border-radius: var(--radius-md); padding: 28px; text-align: center;">
+        <p style="font-size: 0.8rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Your Estimated Monthly Savings With LocalBiz</p>
+        <h2 style="font-size: 3rem; font-weight: 900; color: #4ade80; margin: 12px 0;" id="savingsDisplay">₹30,000</h2>
+        <p style="font-size: 0.8rem; color: #cbd5e1;">More profit directly kept by your local business every single month!</p>
+        <a href="register.html" class="btn btn-primary" style="margin-top: 20px; width: 100%; background: #16a34a;"><i class="fa-solid fa-rocket"></i> Register Store & Save Today</a>
+      </div>
+    </div>
+  </section>
+
   <!-- Why LocalBiz vs Aggregators Section -->
   <section class="container" style="margin-bottom: 60px;">
     <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 36px; box-shadow: var(--shadow-sm);">
