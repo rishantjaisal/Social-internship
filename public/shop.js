@@ -142,6 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         localStorage.setItem('localbiz_cart', JSON.stringify(cart));
         updateCartCount();
+        if (typeof window.showToast === 'function') {
+          window.showToast(`Added ${name} to your order!`);
+        }
         btn.innerHTML = '<i class="fa-solid fa-check"></i> Added!';
         setTimeout(() => {
           btn.innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to Order';
