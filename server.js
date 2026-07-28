@@ -229,6 +229,21 @@ app.post('/api/merchant/orders/:id/status', (req, res) => {
   res.status(404).json({ success: false, message: 'Order not found' });
 });
 
+// GET /api/admin/stats - Platform Super-Admin Analytics & Growth Metrics
+app.get('/api/admin/stats', (req, res) => {
+  const stats = db.getAdminStats();
+  res.json({ success: true, stats });
+});
+
+// POST /api/admin/shops/:slug/verify - Toggle Shop Verification Badge
+app.post('/api/admin/shops/:slug/verify', (req, res) => {
+  const updatedShop = db.toggleShopVerification(req.params.slug);
+  if (updatedShop) {
+    return res.json({ success: true, shop: updatedShop });
+  }
+  res.status(404).json({ success: false, message: 'Shop not found' });
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`=================================================`);

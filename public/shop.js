@@ -191,5 +191,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Business QR Code Modal Controls
+  const openQrModalBtn = document.getElementById('openQrModalBtn');
+  const qrModal = document.getElementById('qrModal');
+  const closeQrBtn = document.getElementById('closeQrBtn');
+  const printQrBtn = document.getElementById('printQrBtn');
+  const qrCodeImg = document.getElementById('qrCodeImg');
+
+  if (openQrModalBtn && qrModal) {
+    openQrModalBtn.addEventListener('click', () => {
+      if (qrCodeImg) {
+        const storeUrl = encodeURIComponent(window.location.href);
+        qrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${storeUrl}`;
+      }
+      qrModal.classList.add('active');
+    });
+  }
+
+  if (closeQrBtn && qrModal) {
+    closeQrBtn.addEventListener('click', () => qrModal.classList.remove('active'));
+  }
+
+  if (printQrBtn) {
+    printQrBtn.addEventListener('click', () => {
+      window.print();
+    });
+  }
+
   loadShopData();
 });

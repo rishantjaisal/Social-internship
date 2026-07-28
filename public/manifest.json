@@ -1,0 +1,16 @@
+{
+  "name": "LocalBiz Digital Storefronts",
+  "short_name": "LocalBiz",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "description": "Empowering Every Local Business to Go Digital",
+  "icons": [
+    {
+      "src": "https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&q=80&w=192",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    }
+  ]
+}

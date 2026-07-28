@@ -249,6 +249,35 @@ function updateOrderStatus(id, status) {
   return order;
 }
 
+function toggleShopVerification(slug) {
+  const db = readDb();
+  const shop = db.shops.find((s) => s.slug === slug);
+  if (shop) {
+    shop.isVerified = !shop.isVerified;
+    writeDb(db);
+  }
+  return shop;
+}
+
+function getAdminStats() {
+  const db = readDb();
+  const totalShops = (db.shops || []).length;
+  const verifiedShops = (db.shops || []).filter((s) => s.isVerified).length;
+  const totalUsers = (db.users || []).length;
+  const totalOrders = (db.orders || []).length;
+  const totalRevenue = (db.orders || []).reduce((acc, o) => acc + (o.total || 0), 0);
+
+  return {
+    totalShops,
+    verifiedShops,
+    totalUsers,
+    totalOrders,
+    totalRevenue,
+    growthRate: '+24.5%',
+    systemHealth: '100% Operational',
+  };
+}
+
 module.exports = {
   initDb,
   getUsers,
@@ -258,6 +287,8 @@ module.exports = {
   findShopBySlug,
   addShop,
   updateShopSettings,
+  toggleShopVerification,
+  getAdminStats,
   getProducts,
   getOrders,
   addOrder,

@@ -339,6 +339,74 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Dark Mode Theme Switcher
+  const darkModeToggleBtn = document.getElementById('darkModeToggleBtn');
+  const savedTheme = localStorage.getItem('localbiz_theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    if (darkModeToggleBtn) darkModeToggleBtn.innerHTML = '<i class="fa-solid fa-sun" style="color: #facc15;"></i>';
+  }
+
+  if (darkModeToggleBtn) {
+    darkModeToggleBtn.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark-mode');
+      localStorage.setItem('localbiz_theme', isDark ? 'dark' : 'light');
+      darkModeToggleBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun" style="color: #facc15;"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
+  }
+
+  // AI Chat Assistant Modal
+  const openAiModalBtn = document.getElementById('openAiModalBtn');
+  const aiModal = document.getElementById('aiModal');
+  const closeAiModalBtn = document.getElementById('closeAiModalBtn');
+  const aiQueryForm = document.getElementById('aiQueryForm');
+  const aiInput = document.getElementById('aiInput');
+  const aiChatBox = document.getElementById('aiChatBox');
+
+  if (openAiModalBtn && aiModal) {
+    openAiModalBtn.addEventListener('click', () => aiModal.classList.add('active'));
+  }
+  if (closeAiModalBtn && aiModal) {
+    closeAiModalBtn.addEventListener('click', () => aiModal.classList.remove('active'));
+  }
+
+  if (aiQueryForm && aiInput && aiChatBox) {
+    aiQueryForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = aiInput.value.trim();
+      if (!text) return;
+
+      // Render User Message
+      aiChatBox.innerHTML += `
+        <div style="background: var(--primary); color: white; padding: 10px 14px; border-radius: var(--radius-md); align-self: flex-end; max-width: 85%;">
+          ${text}
+        </div>
+      `;
+      aiInput.value = '';
+      aiChatBox.scrollTop = aiChatBox.scrollHeight;
+
+      // Simulate AI Assistant Answer
+      setTimeout(() => {
+        let answer = "I can help you find verified neighborhood stores! Check out **Kusum Medical Store** for pharmacy needs, **Sharma Organic Grocery** for fresh farm produce, or **RK Electronics** for quick repairs.";
+        const q = text.toLowerCase();
+        if (q.includes('medical') || q.includes('medicine') || q.includes('pharmacy') || q.includes('paracetamol')) {
+          answer = "🏥 **Kusum Medical Store** is a 24/7 licensed pharmacy offering authentic medicines, surgical supplies, and prescription delivery in Civil Lines, Delhi!";
+        } else if (q.includes('milk') || q.includes('grocery') || q.includes('vegetable')) {
+          answer = "🥬 **Sharma Organic Grocery** in Noida Sector 18 offers 30-minute express delivery for organic pulses, fresh dairy, and farm vegetables!";
+        } else if (q.includes('repair') || q.includes('phone') || q.includes('charger') || q.includes('electronics')) {
+          answer = "📱 **RK Electronics & Mobile Repair** in Laxmi Nagar provides authorized phone repair, braided 65W cables, and genuine accessory warranty!";
+        }
+
+        aiChatBox.innerHTML += `
+          <div style="background: white; color: var(--text-main); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border); max-width: 85%;">
+            🤖 ${answer}
+          </div>
+        `;
+        aiChatBox.scrollTop = aiChatBox.scrollHeight;
+      }, 700);
+    });
+  }
+
   // Update Navbar with Active User Session State
   const activeUserRaw = localStorage.getItem('localbiz_active_user');
   const navActions = document.querySelector('.nav-actions');
@@ -347,6 +415,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const user = JSON.parse(activeUserRaw);
       navActions.innerHTML = `
         <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" class="tool-btn" id="darkModeToggleBtn" title="Toggle Dark/Light Theme" style="font-size: 1.1rem; margin-right: 4px;">
+            <i class="fa-solid fa-moon"></i>
+          </button>
           <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary);">
             <i class="fa-solid fa-circle-user"></i> ${user.name}
           </span>
@@ -362,7 +433,23 @@ document.addEventListener('DOMContentLoaded', () => {
           window.location.reload();
         });
       }
+
+      const darkModeToggleBtnDynamic = document.getElementById('darkModeToggleBtn');
+      if (darkModeToggleBtnDynamic) {
+        darkModeToggleBtnDynamic.addEventListener('click', () => {
+          const isDark = document.body.classList.toggle('dark-mode');
+          localStorage.setItem('localbiz_theme', isDark ? 'dark' : 'light');
+          darkModeToggleBtnDynamic.innerHTML = isDark ? '<i class="fa-solid fa-sun" style="color: #facc15;"></i>' : '<i class="fa-solid fa-moon"></i>';
+        });
+      }
     } catch (e) {}
+  }
+
+  // Register PWA Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch((err) => console.warn('Service worker registration failed:', err));
+    });
   }
 
   // Initial Load

@@ -56,6 +56,9 @@
 
       <!-- Action Buttons -->
       <div style="display: flex; gap: 12px; flex-wrap: wrap;" id="shopActionBtns">
+        <button class="btn btn-outline" id="openQrModalBtn">
+          <i class="fa-solid fa-qrcode"></i> Business QR Code
+        </button>
         <button class="btn btn-primary" id="openRxModalBtn" style="background: var(--accent); display: none;">
           <i class="fa-solid fa-file-medical"></i> Upload Prescription
         </button>
@@ -96,6 +99,27 @@
           <i class="fa-solid fa-paper-plane"></i> Upload & Submit Order
         </button>
       </form>
+    </div>
+  </div>
+
+  <!-- Business QR Code Modal -->
+  <div class="modal-backdrop" id="qrModal">
+    <div class="modal" style="text-align: center;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-weight: 800;"><i class="fa-solid fa-qrcode" style="color: var(--primary);"></i> Storefront QR Code</h3>
+        <button id="closeQrBtn" style="font-size: 1.25rem; color: var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">
+        Scan this QR code with any smartphone camera to open this storefront directly!
+      </p>
+
+      <div style="background: white; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border); display: inline-block; margin-bottom: 16px;">
+        <img id="qrCodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://local-bizzness.netlify.app/shop.html?slug=kusum-medical" alt="Store QR Code" style="width: 180px; height: 180px;">
+      </div>
+
+      <button class="btn btn-outline" id="printQrBtn" style="width: 100%;">
+        <i class="fa-solid fa-print"></i> Print QR Poster for Shop Counter
+      </button>
     </div>
   </div>
 

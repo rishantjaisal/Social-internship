@@ -660,6 +660,82 @@ input, textarea, select {
   color: var(--primary);
 }
 
+/* Dark Mode Theme Tokens */
+body.dark-mode {
+  --background: #090d16;
+  --card: #111827;
+  --dark-surface: #1f2937;
+  --border: #1f2937;
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --primary-light: rgba(37, 99, 235, 0.15);
+}
+
+body.dark-mode .navbar {
+  background: rgba(9, 13, 22, 0.88);
+  border-bottom-color: #1f2937;
+}
+
+body.dark-mode .shop-card,
+body.dark-mode .category-card,
+body.dark-mode .auth-card,
+body.dark-mode .step-card,
+body.dark-mode .faq-item,
+body.dark-mode .comparison-table,
+body.dark-mode .modal,
+body.dark-mode .live-ticker {
+  background: #111827;
+  border-color: #1f2937;
+  color: #f9fafb;
+}
+
+body.dark-mode .comparison-table th {
+  background: #1f2937;
+  color: #f9fafb;
+}
+
+body.dark-mode .nav-search input {
+  background: #111827;
+  border-color: #1f2937;
+  color: #f9fafb;
+}
+
+/* Skeleton Shimmer Loaders */
+.skeleton {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+body.dark-mode .skeleton {
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  height: 16px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.skeleton-title {
+  height: 24px;
+  margin-bottom: 12px;
+  width: 60%;
+}
+
+.skeleton-rect {
+  height: 180px;
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+
 /* Footer */
 footer {
   margin-top: auto;

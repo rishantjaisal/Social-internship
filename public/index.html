@@ -31,6 +31,9 @@
       </div>
 
       <div class="nav-actions">
+        <button type="button" class="tool-btn" id="darkModeToggleBtn" title="Toggle Dark/Light Theme" style="font-size: 1.1rem; margin-right: 4px;">
+          <i class="fa-solid fa-moon"></i>
+        </button>
         <a href="login.html" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.8rem;">Sign In</a>
         <a href="register.html" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.8rem;"><i class="fa-solid fa-user-plus"></i> Register Shop</a>
       </div>
@@ -273,6 +276,34 @@
       </div>
     </div>
   </section>
+
+  <!-- AI Assistant Floating Widget Trigger -->
+  <button type="button" id="openAiModalBtn" style="position: fixed; bottom: 24px; right: 24px; z-index: 99; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #3b82f6); color: white; border: none; box-shadow: var(--shadow-lg); font-size: 1.25rem; display: flex; align-items: center; justify-content: center; cursor: pointer;" title="LocalBiz AI Assistant">
+    <i class="fa-solid fa-wand-magic-sparkles"></i>
+  </button>
+
+  <!-- AI Assistant Modal Dialog -->
+  <div class="modal-backdrop" id="aiModal">
+    <div class="modal" style="max-width: 480px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--primary);"></i> LocalBiz AI Assistant
+        </h3>
+        <button type="button" id="closeAiModalBtn" style="color: var(--text-muted); font-size: 1rem;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div id="aiChatBox" style="height: 240px; overflow-y: auto; background: var(--background); border-radius: var(--radius-md); padding: 12px; font-size: 0.85rem; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+        <div style="background: white; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border); max-width: 85%;">
+          👋 Hello! I am your LocalBiz AI Assistant. Ask me anything like <em>"Which pharmacy is open 24/7?"</em> or <em>"Find organic milk near me"</em>!
+        </div>
+      </div>
+
+      <form id="aiQueryForm" style="display: flex; gap: 8px;">
+        <input type="text" id="aiInput" placeholder="Ask AI Assistant..." style="flex: 1; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.85rem;">
+        <button type="submit" class="btn btn-primary" style="padding: 10px 16px;"><i class="fa-solid fa-paper-plane"></i></button>
+      </form>
+    </div>
+  </div>
 
   <!-- Live Purchase Notification Ticker Container -->
   <div id="liveTickerContainer"></div>
