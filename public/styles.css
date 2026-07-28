@@ -836,6 +836,58 @@ body.dark-mode .glass-card {
   to { opacity: 1; transform: translateX(0); }
 }
 
+/* Mobile Bottom Navigation Bar */
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    z-index: 900;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  body.dark-mode .mobile-bottom-nav {
+    background: rgba(17, 24, 39, 0.95);
+    border-top-color: #1f2937;
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    transition: var(--transition);
+  }
+
+  .mobile-nav-item.active,
+  .mobile-nav-item:hover {
+    color: var(--primary);
+  }
+
+  .mobile-nav-item i {
+    font-size: 1.1rem;
+  }
+
+  body {
+    padding-bottom: 64px;
+  }
+}
+
 /* Footer */
 footer {
   margin-top: auto;

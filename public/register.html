@@ -117,6 +117,10 @@
               <i class="fa-solid fa-eye" id="custEyeIcon"></i>
             </button>
           </div>
+          <div style="height: 4px; background: #e2e8f0; border-radius: 2px; margin-top: 6px; overflow: hidden;">
+            <div id="custPwdBar" style="width: 30%; height: 100%; background: #ef4444; transition: all 0.3s ease;"></div>
+          </div>
+          <span id="custPwdText" style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; display: block; margin-top: 2px;">Password strength: Good</span>
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; margin-top: 8px;">
@@ -222,6 +226,30 @@
           const isPassword = merchPassword.type === 'password';
           merchPassword.type = isPassword ? 'text' : 'password';
           merchEyeIcon.className = isPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+        });
+      }
+
+      // Password Strength Live Meter Calculation
+      if (custPassword) {
+        custPassword.addEventListener('input', (e) => {
+          const val = e.target.value;
+          const custPwdBar = document.getElementById('custPwdBar');
+          const custPwdText = document.getElementById('custPwdText');
+          if (!custPwdBar || !custPwdText) return;
+
+          if (val.length < 6) {
+            custPwdBar.style.width = '30%';
+            custPwdBar.style.background = '#ef4444';
+            custPwdText.textContent = 'Password strength: Weak (min 6 chars)';
+          } else if (val.length < 10) {
+            custPwdBar.style.width = '65%';
+            custPwdBar.style.background = '#f59e0b';
+            custPwdText.textContent = 'Password strength: Good';
+          } else {
+            custPwdBar.style.width = '100%';
+            custPwdBar.style.background = '#16a34a';
+            custPwdText.textContent = 'Password strength: Strong & Secure';
+          }
         });
       }
 
