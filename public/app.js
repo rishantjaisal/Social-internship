@@ -339,6 +339,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Update Navbar with Active User Session State
+  const activeUserRaw = localStorage.getItem('localbiz_active_user');
+  const navActions = document.querySelector('.nav-actions');
+  if (activeUserRaw && navActions) {
+    try {
+      const user = JSON.parse(activeUserRaw);
+      navActions.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary);">
+            <i class="fa-solid fa-circle-user"></i> ${user.name}
+          </span>
+          ${user.role === 'MERCHANT' ? '<a href="merchant.html" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.75rem;"><i class="fa-solid fa-store"></i> Merchant Portal</a>' : ''}
+          <button type="button" class="btn btn-outline" id="signOutBtn" style="padding: 6px 12px; font-size: 0.75rem;"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
+        </div>
+      `;
+
+      const signOutBtn = document.getElementById('signOutBtn');
+      if (signOutBtn) {
+        signOutBtn.addEventListener('click', () => {
+          localStorage.removeItem('localbiz_active_user');
+          window.location.reload();
+        });
+      }
+    } catch (e) {}
+  }
+
   // Initial Load
   loadShops();
 });

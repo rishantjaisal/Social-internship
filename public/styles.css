@@ -629,6 +629,37 @@ input, textarea, select {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Password Visibility Toggle Wrapper */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 42px !important;
+}
+
+.toggle-pwd-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.toggle-pwd-btn:hover {
+  color: var(--primary);
+}
+
 /* Footer */
 footer {
   margin-top: auto;
